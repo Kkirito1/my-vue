@@ -39,11 +39,11 @@ export default {
     },
     rules: {
       username: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' },
+        { required: true, message: '请输入用户名', trigger: 'blur' },
         { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
       ],
       password: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' },
+        { required: true, message: '请输入密码', trigger: 'blur' },
         { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
       ]
     }
@@ -56,6 +56,7 @@ export default {
       this.$refs.loginFormet.resetFields()
     },
     login () {
+      // 表单的预校验，当表单内容通过验证规则时valid返回true，反之返回false
       this.$refs.loginFormet.validate(async valid => {
         // console.log(valid) //valid是一个布尔值 当值为true时发送ajax请求
         if (!valid) return
@@ -63,7 +64,6 @@ export default {
         console.log(res)
         if (res.meta.status !== 200) {
           console.log(this)
-
           this.$message.error(res.meta.msg)
         } else {
           this.$message.success('登录成功！')

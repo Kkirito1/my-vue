@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/login/index.vue'
 import Home from './views/home/Home.vue'
+import Welcome from './views/home/wlecome.vue'
+import User from './views/user/Users.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -13,7 +15,15 @@ const router = new Router({
     component: Login
   }, {
     path: '/home',
-    component: Home
+    component: Home,
+    redirect: '/welcome',
+    children: [{
+      path: '/welcome',
+      component: Welcome
+    }, {
+      path: '/users',
+      component: User
+    }]
   }]
 })
 // 挂载路由导航守卫

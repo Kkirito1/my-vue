@@ -51,7 +51,12 @@
               @click="deleteUser(scope.row.id)"
             ></el-button>
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-setting"
+                size="mini"
+                @click="setRole(scope.row)"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -109,6 +114,25 @@
         <el-button type="primary" @click="editUser(editForm.id)">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分配角色对话框 -->
+    <el-dialog title="分配角色" :visible.sync="setdialogVisible" width="50%">
+      <div>
+        <p>{{userinfo.username}}</p>
+        <p>{{userinfo.role_name}}</p>
+        <el-select v-model="selectedRoleId" placeholder="请选择">
+          <el-option
+            v-for="item in rolesList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setdialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="setdialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -164,12 +188,20 @@ export default {
       },
       // 所有的用户列表
       userList: [],
+      // 需要分配角色的用户信息
+      userinfo: {},
+      // 查询到的角色列表的数据
+      rolesList: [],
+      // 已选中的角色id
+      selectedRoleId: '',
       // 总数据条数
       total: 0,
       // 控制添加用户对话框的显示与隐藏
       dialogVisible: false,
       // 控制修改用户对话框的显示与隐藏
       editdialogVisible: false,
+      // 控制分配角色对话框的显示与隐藏
+      setdialogVisible: false,
       // 添加用户的表单数据
       addForm: {
         username: '',
@@ -331,6 +363,16 @@ export default {
         this.$message.success('删除成功')
         this.getUserList()
       }
+    },
+    async setRole (userinfo) {
+      this.userinfo = userinfo
+      this.setdialogVisible = true
+      const { data: res } = await this.$http.get('roles')
+      // console.log(res)
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取角色列表失败')
+      }
+      this.rolesList = res.data
     }
   }
 }

@@ -136,9 +136,7 @@ export default {
       if (res !== 'confirm') {
         return this.$message.info('你取消了删除')
       } else {
-        const { data: result } = await this.$http.delete(
-          `roles/${roleId.id}/rights/${rightId}`
-        )
+        const { data: result } = await this.$http.delete(`roles/${roleId.id}/rights/${rightId}`)
         if (result.meta.status !== 200) {
           return this.$message.error('取消权限失败')
         }
@@ -176,17 +174,11 @@ export default {
     },
     // 点击对话框确定按钮后执行的函数，更新权限
     async updataRight () {
-      const key = [
-        ...this.$refs.treeRef.getCheckedKeys(),
-        ...this.$refs.treeRef.getHalfCheckedKeys()
-      ]
+      const key = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()]
       const idStr = key.join(',')
-      const { data: res } = await this.$http.post(
-        `roles/${this.roleId}/rights`,
-        {
-          rids: idStr
-        }
-      )
+      const { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, {
+        rids: idStr
+      })
       if (res.meta.status !== 200) {
         return this.$message.error('更新权限失败')
       } else {

@@ -130,7 +130,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setdialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setdialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="updatadialogVisible">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -373,6 +373,25 @@ export default {
         return this.$message.error('获取角色列表失败')
       }
       this.rolesList = res.data
+    },
+    // 更新用户角色
+    async updatadialogVisible () {
+      if (!this.selectedRoleId) {
+        return this.$message.error('请选择要分配的角色')
+      }
+      const { data: res } = await this.$http.put(
+        `users/${this.userinfo.id}/role`,
+        {
+          rid: this.selectedRoleId
+        }
+      )
+      if (res.meta.status !== 200) {
+        return this.$message.error('设置角色失败')
+      } else {
+        this.$message.success('设置角色成功')
+        this.setdialogVisible = false
+        this.getUserList()
+      }
     }
   }
 }

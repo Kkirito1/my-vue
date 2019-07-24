@@ -28,10 +28,16 @@ import {
   Tree,
   Select,
   Option,
-  Cascader
+  Cascader,
+  Alert,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue
+  .use(Tabs)
+  .use(TabPane)
+  .use(Alert)
   .use(Select)
   .use(Option)
   .use(Button)
